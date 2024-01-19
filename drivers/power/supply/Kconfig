@@ -492,6 +492,12 @@ config CHARGER_GPIO
 	  This driver can be build as a module. If so, the module will be
 	  called gpio-charger.
 
+config HQ_CHARGER_MANAGER
+	tristate "hq charger manager"
+	default n
+	help
+	 Say Y enable hq charger manager
+
 config CHARGER_MANAGER
 	tristate "Battery charger manager for multiple chargers"
 	depends on REGULATOR
@@ -681,6 +687,38 @@ config CHARGER_CROS_USBPD
 	  what is connected to USB PD ports from the EC and converts
 	  that into power_supply properties.
 
+config CHARGER_SC8551
+	tristate "SC8551 Divider Charger Driver"
+	depends on I2C
+	default n
+	help
+	  Say Y here to enable support of sc8551 divider charger
+	  It is mainly used as divider charger for
+	  direct charge
+
+config CHARGER_LN8000
+	tristate "LN8000 Divider Charger Driver"
+	depends on I2C
+	default n
+	help
+	  Say Y here to enable support of ln8000 divider charger
+	  It is mainly used as divider charger for
+	  direct charge
+
+config CHARGER_PD_MANAGER
+	tristate "PD policy manager"
+	default n
+	help
+	  Say Y here to enable support of pd manager
+	  It is mainly used as divider charger for
+	  direct charge
+
+config SM5602_FG
+	tristate "sm5602 fg"
+	default n
+	help
+	  Say Y to enable support for SM5602 fuel gauge
+
 config CHARGER_SC2731
 	tristate "Spreadtrum SC2731 charger driver"
 	depends on MFD_SC27XX_PMIC || COMPILE_TEST
@@ -725,5 +763,6 @@ config CHARGER_WILCO
 	  Documentation/ABI/testing/sysfs-class-power-wilco
 
 source "drivers/power/supply/qcom/Kconfig"
+source "drivers/power/supply/battery_secrete/Kconfig"
 
 endif # POWER_SUPPLY

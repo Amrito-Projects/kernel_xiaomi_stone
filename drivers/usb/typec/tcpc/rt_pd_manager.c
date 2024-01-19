@@ -80,9 +80,6 @@ struct rt_pd_manager_data {
 	struct typec_partner_desc partner_desc;
 	struct usb_pd_identity partner_identity;
 };
-#ifdef CONFIG_WT_QGKI
-extern int charger_notifier_call_chain(unsigned long val, void *v);
-#endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
 #include <linux/qti_power_supply.h>
@@ -550,20 +547,7 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			dev_info(rpmd->dev, "%s Audio plug out\n", __func__);
 			/* disable AudioAccessory connection */
 		}
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
-		if (new_state != TYPEC_UNATTACHED) {
-			val.intval = noti->typec_state.polarity + 1;
-#ifdef CONFIG_WT_QGKI
-			//notify tp to charger mode
-			charger_notifier_call_chain(CHARGER_STATE_ENABLE,NULL);
-#endif
-		} else {
-			val.intval = 0;
-#ifdef CONFIG_WT_QGKI
-			//notify tp to charger mode
-			charger_notifier_call_chain(CHARGER_STATE_DISABLE,NULL);
-#endif
-		}
+
 		smblib_set_prop(rpmd, RT1711_TYPEC_CC_ORIENTATION, &val);
 		dev_info(rpmd->dev, "%s USB plug. val.intval=%d\n", __func__, val.intval);
 
@@ -584,7 +568,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			dev_err(rpmd->dev, "%s TYPEC_ATTACHED_AUDIO(%d)\n",__func__, val.intval);
 			smblib_set_prop(rpmd, RT1711_TYPEC_MODE, &val);
 		}
-#endif
 
 		if (new_state == TYPEC_UNATTACHED) {
 			val.intval = 0;

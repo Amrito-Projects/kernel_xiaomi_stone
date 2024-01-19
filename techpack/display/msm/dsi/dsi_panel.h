@@ -418,5 +418,5 @@ void dsi_panel_destroy_cmd_packets(struct dsi_panel_cmd_set *set);
 
 void dsi_panel_dealloc_cmd_packets(struct dsi_panel_cmd_set *set);
 
-void dsi_set_backlight_control(struct dsi_panel *panel, bool locked);
+void dsi_set_backlight_control(struct dsi_panel *panel);
 #endif /* _DSI_PANEL_H_ */

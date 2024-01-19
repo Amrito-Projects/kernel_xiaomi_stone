@@ -1620,6 +1620,17 @@ static void _sde_encoder_rc_cancel_delayed(struct sde_encoder_virt *sde_enc,
 				sw_event);
 }
 
+void sde_encoder_cancel_delayed_work(struct drm_encoder *encoder)
+{
+	struct sde_encoder_virt *sde_enc;
+
+	if (!encoder)
+		return;
+
+	sde_enc = to_sde_encoder_virt(encoder);
+	_sde_encoder_rc_cancel_delayed(sde_enc, 0);
+}
+
 static void _sde_encoder_rc_kickoff_delayed(struct sde_encoder_virt *sde_enc,
 	u32 sw_event)
 {
@@ -4215,8 +4226,8 @@ void sde_encoder_kickoff(struct drm_encoder *drm_enc, bool is_error,
 
 	sde_conn = to_sde_connector(sde_enc->cur_master->connector);
 	display = sde_conn->display;
-	if (display && display->panel)
-		dsi_set_backlight_control(display->panel, false);
+	if (likely(display && display->panel))
+		dsi_set_backlight_control(display->panel);
 
 	/* All phys encs are ready to go, trigger the kickoff */
 	_sde_encoder_kickoff_phys(sde_enc, config_changed);
